@@ -1,13 +1,14 @@
 package shop;
 
+import io.cucumber.java.After;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import shopPages.MainPage;
-import shopPages.MyAccountPage;
-import shopPages.SignInPage;
+import shopPages.*;
 
 import java.time.Duration;
 
@@ -15,7 +16,7 @@ public class AddingAddressDefs {
 
     private WebDriver driver;
 
-    @Given("User is on the main page")
+    @Given("The user is registered, has the first address added and is on the home page")
     public void shopSetup() {
       System.setProperty("webdriver.chrome.driver", "src/main/resources/drivers/chromedriver.exe");
       driver = new ChromeDriver();
@@ -33,14 +34,31 @@ public class AddingAddressDefs {
         MyAccountPage myAccountPage = new MyAccountPage(driver);
         Assert.assertEquals("Karol Nowak", myAccountPage.loginConfirmation());
         myAccountPage.addresses();
-    }
-//    @And("Will add address details: Alias {}, Address {}, City {}, Postal code {}, Country {}, Phone {}")
-//    public void addingNewAddress() {
-//
-//    }
 
-//    @After
-//    public void cleanup() {
-//        driver.quit();
-//    }
+        AddressesPage addressesPage = new AddressesPage(driver);
+        addressesPage.createNewAddress();
+    }
+    @And("Will add address details: Alias {}, Address {}, City {}, Postal code {}, Country {}, Phone {}")
+    public void addingNewAddress(String alias, String address, String city, String postalCode, String country, String phoneNumber) {
+        NewAddressPage newAddressPage = new NewAddressPage(driver);
+        newAddressPage.addNewAddress(alias, address, city, postalCode, country, phoneNumber);
+    }
+
+    @Then("New address should contain \"address details\": {}, {}, {}, {}, {}, {}")
+    public void assertContainWord(String expectedAlias, String expectedAddress, String expectedCity, String expectedPostalCode, String expectedCountry, String expectedPhoneNumber) {
+        AddressesPage addressesPage = new AddressesPage(driver);
+        Assert.assertEquals("Address successfully added!", addressesPage.getSuccessAlertText());
+        Assert.assertTrue(addressesPage.getNewAddressText().contains(expectedAlias));
+        Assert.assertTrue(addressesPage.getNewAddressText().contains(expectedAddress));
+        Assert.assertTrue(addressesPage.getNewAddressText().contains(expectedCity));
+        Assert.assertTrue(addressesPage.getNewAddressText().contains(expectedPostalCode));
+        Assert.assertTrue(addressesPage.getNewAddressText().contains(expectedCountry));
+        Assert.assertTrue(addressesPage.getNewAddressText().contains(expectedPhoneNumber));
+
+    }
+
+    @After
+    public void cleanup() {
+        driver.quit();
+    }
 }

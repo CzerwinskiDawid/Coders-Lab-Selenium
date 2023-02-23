@@ -16,8 +16,10 @@ public class SignInPage {
 
     @FindBy(id = "field-email")
     private WebElement emailInput;
+
     @FindBy(id = "field-password")
     private WebElement passwordInput;
+
     @FindBy(id = "submit-login")
     private WebElement signInButton;
 
