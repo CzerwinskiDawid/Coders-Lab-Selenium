@@ -18,14 +18,15 @@ public class AddingAddressDefs {
 
     @Given("The user is registered, has the first address added and is on the home page")
     public void shopSetup() {
-      System.setProperty("webdriver.chrome.driver", "src/main/resources/drivers/chromedriver.exe");
-      driver = new ChromeDriver();
-      driver.manage().window().maximize();
-      driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-      driver.get("https://mystore-testlab.coderslab.pl/index.php");
+        System.setProperty("webdriver.chrome.driver", "src/main/resources/drivers/chromedriver.exe");
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.get("https://mystore-testlab.coderslab.pl/index.php");
         MainPage mainPage = new MainPage(driver);
         mainPage.signIn();
     }
+
     @When("He logs in with the correct data: email {}, password {}")
     public void signIn(String email, String password) {
         SignInPage signInPage = new SignInPage(driver);
@@ -38,6 +39,7 @@ public class AddingAddressDefs {
         AddressesPage addressesPage = new AddressesPage(driver);
         addressesPage.createNewAddress();
     }
+
     @And("Will add address details: Alias {}, Address {}, City {}, Postal code {}, Country {}, Phone {}")
     public void addingNewAddress(String alias, String address, String city, String postalCode, String country, String phoneNumber) {
         NewAddressPage newAddressPage = new NewAddressPage(driver);
@@ -54,7 +56,13 @@ public class AddingAddressDefs {
         Assert.assertTrue(addressesPage.getNewAddressText().contains(expectedPostalCode));
         Assert.assertTrue(addressesPage.getNewAddressText().contains(expectedCountry));
         Assert.assertTrue(addressesPage.getNewAddressText().contains(expectedPhoneNumber));
+    }
 
+    @Then("User can delete this address")
+    public void deletingNewAddress() {
+        AddressesPage addressesPage = new AddressesPage(driver);
+        addressesPage.deleteAddress();
+        Assert.assertEquals("Address successfully deleted!", addressesPage.getDeleteAddressAlert());
     }
 
     @After
