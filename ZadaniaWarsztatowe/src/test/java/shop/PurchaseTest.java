@@ -1,13 +1,19 @@
 package shop;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import shopPages.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
+
 
 public class PurchaseTest {
 
@@ -23,8 +29,10 @@ public class PurchaseTest {
         MainPage mainPage = new MainPage(driver);
         mainPage.signIn();
     }
+
+
     @Test
-    public void shopping() {
+    public void shopping() throws InterruptedException, IOException {
         SignInPage signInPage = new SignInPage(driver);
         signInPage.signIn("nonorof900@mustbeit.com", "TEST1234");
 
@@ -39,8 +47,25 @@ public class PurchaseTest {
 
         ProductPage productPage = new ProductPage(driver);
         productPage.setSizeSelection();
+        productPage.quaintity(String.valueOf(5));
+        productPage.addToCart();
+
+        CartPage cartPage = new CartPage(driver);
+        cartPage.purchaseConfirmation();
+
+        OrderPage orderPage = new OrderPage(driver);
+        orderPage.addressConfirmation();
+        orderPage.deliveryConfirmation();
+        orderPage.paymentOption();
+        orderPage.orderConfirmation();
+
+        TakesScreenshot ts = (TakesScreenshot) driver;
+        File screenshotFile = ts.getScreenshotAs(OutputType.FILE);
+        String screenshotPath = "C:\\Users\\Admin\\OneDrive\\Pulpit\\screenshot.png";
+        FileUtils.copyFile(screenshotFile, new File(screenshotPath));
 
     }
+
 
 //    @After
 //    public void cleanup() {
