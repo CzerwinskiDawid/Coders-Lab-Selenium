@@ -3,6 +3,7 @@ package shopPages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
@@ -16,6 +17,9 @@ public class MyAccountPage {
         PageFactory.initElements(driver, this);
     }
 
+    @FindBy(id = "_desktop_logo")
+    private WebElement shopLogo;
+
 
     public String loginConfirmation() {
         List<WebElement> elements = driver.findElements(By.cssSelector(".hidden-sm-down"));
@@ -27,5 +31,9 @@ public class MyAccountPage {
         List<WebElement> elements = driver.findElements(By.xpath("//span[@class=\"link-item\"]"));
         WebElement addressesButton = elements.get(1);
         addressesButton.click();
+    }
+
+    public void backToMainPage() {
+        shopLogo.click();
     }
 }

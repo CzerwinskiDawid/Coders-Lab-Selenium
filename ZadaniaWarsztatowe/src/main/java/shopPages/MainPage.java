@@ -16,8 +16,16 @@ public class MainPage {
 
     @FindBy(id = "_desktop_user_info")
     private WebElement signInButton;
+    @FindBy(css = ".ui-autocomplete-input")
+    private WebElement searchInput;
 
     public void signIn() {
         signInButton.click();
+    }
+
+    public void searchingProduct(String productName) {
+        searchInput.clear();
+        searchInput.sendKeys(productName);
+        searchInput.submit();
     }
 }
