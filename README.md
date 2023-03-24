@@ -1,2 +1,2 @@
 # Coders-Lab-Selenium
-Zadania warsztatowe
+Zadania warsztatowe.
