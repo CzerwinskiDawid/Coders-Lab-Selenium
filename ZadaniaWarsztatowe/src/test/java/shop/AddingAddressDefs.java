@@ -8,6 +8,8 @@ import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import shopPages.*;
 
 import java.time.Duration;
@@ -16,10 +18,16 @@ public class AddingAddressDefs {
 
     private WebDriver driver;
 
+
     @Given("The user is registered, has the first address added and is on the home page")
     public void shopSetup() {
         System.setProperty("webdriver.chrome.driver", "src/main/resources/drivers/chromedriver.exe");
-        driver = new ChromeDriver();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--remote-allow-origins=*");
+        options.addArguments("--disable notifications");
+        DesiredCapabilities cp = new DesiredCapabilities();
+        cp.setCapability(ChromeOptions.CAPABILITY, options);
+        driver = new ChromeDriver(options);
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.get("https://mystore-testlab.coderslab.pl/index.php");
@@ -65,8 +73,8 @@ public class AddingAddressDefs {
         Assert.assertEquals("Address successfully deleted!", addressesPage.getDeleteAddressAlert());
     }
 
-    @After
-    public void cleanup() {
-        driver.quit();
-    }
+//    @After
+//    public void cleanup() {
+//        driver.quit();
+//    }
 }
